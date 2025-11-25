@@ -48,3 +48,20 @@ bmw_sales_decade <- bmw_sales_decade |>
   ) |>
   select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales_Volume)
 ```
+
+Top colors by year
+
+```{r}
+salescoloryear<- bmw_sales_decade |> 
+  select(Color, Year, Sales_Volume)
+avgsales<- salescoloryear |> 
+  group_by(Year, Color) |>
+  summarize(mean_sales = mean(Sales_Volume))
+
+avgsales |>
+ggplot(aes(Color,mean_sales)) +
+geom_col(aes(fill = Color))+
+  facet_wrap(~Year)+
+  coord_flip()+
+  scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white"))
+```
