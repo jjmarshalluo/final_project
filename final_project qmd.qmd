@@ -6,11 +6,20 @@ editor: visual
 ---
 
 ```{r}
-# install.packages("here")
-# install.packages("tidyverse")
+install.packages("here")
+install.packages("tidyverse")
 library(here)
 library(tidyverse)
-library(ggplot2)
+install.packages("skimr")
+library(skimr)
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("knitr")
+library(dplyr)
+library(tidyr)
+library(knitr)
+
+
 ```
 
 # Load the data
@@ -19,14 +28,12 @@ library(ggplot2)
 bmw_sales<- read_csv(here("data", "bmw_sales_data.csv"))
 ```
 
-# Filter the data
+The `echo: false` option disables the printing of code (only output is displayed).
 
 ```{r}
 bmw_sales_decade <- bmw_sales %>% 
   filter(Year >= 2014)
 ```
-
-# Top 3 popular models
 
 ```{r}
 # rank BMW models by sales volume
@@ -37,17 +44,25 @@ bmw_decade_top3 <- bmw_sales_decade |>
   arrange(desc(Model_Sales))
 ```
 
-# Select relevant variables and filter data
+```{r}
+
+# rank BMW models by sales volume
+# will use object bmw)decade_top3 for inline text describing top 3
+bmw_decade_top3 <- bmw_sales_decade |> 
+  group_by(Model) |> 
+  summarize(Model_Sales = sum(Sales_Volume)) |> 
+  arrange(desc(Model_Sales))
+
+
+```
 
 ```{r}
-# only include top 3 bestselling models and relevant variables in dataset
-bmw_sales_decade <- bmw_sales_decade |>
-  filter(
-    Model == '7 Series' |
-    Model == '3 Series' |
-    Model == 'i8'
-  ) |>
-  select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales_Volume)
+
+# Summarize numeric columns
+bmw_decade_top3 %>%
+  summarise(across(where(is.numeric), list(mean = mean, sd = sd, min = min, max = max)))
+
+skim(bmw_decade_top3)
 ```
 
 Top colors by year
@@ -68,48 +83,39 @@ geom_col(aes(fill = Color))+
 ```
 
 ```{r}
-# filter to 2014–2024, select needed variables
 
-# bmw_price_sales <- bmw_sales %>%
-# select(Year, Price_USD, Sales_Volume, Fuel_Type) %>%
-# filter(Year >= 2014, Year <= 2024)
+# 1. Average Sales by Year and Color
+avgsales <- salescoloryear |> 
+  group_by(Year, Color) |>
+  summarize(mean_sales = mean(Sales_Volume), .groups = "drop")
 
-# summarize avg price and avg sales per year per fuel type
+# 2. Summary Table (Long)
+summary_table <- avgsales |>
+  arrange(Year, Color)
 
-bmw_price_sales_summary <- bmw_sales_decade %>%
-group_by(Year, Fuel_Type) %>%
-summarize(
-avg_price = mean(Price_USD, na.rm = TRUE),
-avg_sales = mean(Sales_Volume, na.rm = TRUE)
+summary_table
+
+# 3. Formatted Table
+kable(
+  summary_table,
+  col.names = c("Year", "Color", "Mean Sales Volume"),
+  caption = "Average BMW Sales by Color and Year"
 )
 
-# visualize relationship btw price and sales volume
+# 4. Wide Table
+summary_wide <- avgsales |>
+  pivot_wider(
+    names_from = Year,
+    values_from = mean_sales
+  )
+summary_stats <- avgsales |>
+  group_by(Color) |>
+  summarize(
+    avg_sales = mean(mean_sales),
+    total_sales = sum(mean_sales),
+    .groups = "drop"
+  )
 
-ggplot(bmw_price_sales_summary, aes(x = avg_price, y = avg_sales, color = Fuel_Type)) +
-geom_line(linewidth = 1) +
-geom_point(size = 2) +
-labs(
-title = "Relationship Between BMW Price and Sales Volume (2014–2024)",
-x = "Average Price",
-y = "Average Sales Volume",
-color = "Fuel Type"
-) +
-theme_minimal()
+summary_stats
 
-
-```
-
-Visualization Trends in BMW Model Price From 2014 to 2024 by Region
-
-```{r}
-bmw_sales_decade |>
-  ggplot(aes(Year, Price_USD, color = Model)) +
-  geom_smooth(se = FALSE) +
-  labs(
-    x = 'Year',
-    y = 'Price (USD)',
-    title = 'Trends in BMW Model Price From 2014 to 2024 by Region',
-    subtitle = 'Top 3 Bestselling BMW Models'
-  ) +
-  facet_wrap(~Region)
 ```
