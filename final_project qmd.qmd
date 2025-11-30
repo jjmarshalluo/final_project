@@ -3,8 +3,11 @@ title: "final_project"
 author: "Dodjivi Amekoudji, Emily Lang, Jessica Marshall, Kat Vrotsos"
 format: html
 editor: visual
-imbed_resources: true
+embed_resources: true
 ---
+
+## Peer review notes: fixed typo in YAML (imbed --> embed) :)
+## Also: Your code ran top to bottom! I added some spaces throughout but overall the structure is really clean
 
 ```{r}
 # install.packages("here")
@@ -16,10 +19,12 @@ library(readr)
 library(knitr)
 ```
 
+## Peer review notes: readr and ggplot are in tidyverse so you technically don't need to load them too :)
+
 # Load the data
 
 ```{r}
-bmw_sales<- read_csv(here("data", "bmw_sales_data.csv"))
+bmw_sales <- read_csv(here("data", "bmw_sales_data.csv"))
 ```
 
 # Filter the data
@@ -52,6 +57,8 @@ bmw_sales_decade <- bmw_sales_decade |>
   ) |>
   select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales_Volume)
 ```
+
+## Peer review note: Looks great! You could also use "slice_max" to select the top 3 rather than doing it manually, in case you ever wanted to adapt the code for another year or something.
 
 # Top colors by year
 
@@ -106,11 +113,13 @@ avgsales<- salescoloryear |>
 
 avgsales |>
 ggplot(aes(Color,mean_sales)) +
-geom_col(aes(fill = Color))+
-  facet_wrap(~Year)+
-  coord_flip()+
+geom_col(aes(fill = Color)) +
+  facet_wrap(~Year) +
+  coord_flip() +
   scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white"))
 ```
+
+## Peer review note: you create "avgsales" in the above code chunk and also toward the beginning of the script so you could take one out without breaking the code :)
 
 ```{r}
 # filter to 2014–2024, select needed variables
@@ -150,6 +159,21 @@ theme_minimal()
 bmw_sales_decade |>
   ggplot(aes(Year, Price_USD, color = Model)) +
   geom_smooth(se = FALSE) +
+  labs(
+    x = 'Year',
+    y = 'Price (USD)',
+    title = 'Trends in BMW Model Price From 2014 to 2024 by Region',
+    subtitle = 'Top 3 Bestselling BMW Models'
+  ) +
+  facet_wrap(~Region)
+```
+
+## Peer review note: Your plot looks really great. You could also play around with "span" to make your LOESS lines look a little less wiggly:
+
+```{r}
+bmw_sales_decade |>
+  ggplot(aes(Year, Price_USD, color = Model)) +
+  geom_smooth(method = "loess", span = 1, se = FALSE) +
   labs(
     x = 'Year',
     y = 'Price (USD)',
