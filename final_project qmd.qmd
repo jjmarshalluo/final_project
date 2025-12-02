@@ -104,12 +104,17 @@ avgsales<- salescoloryear |>
   group_by(Year, Color) |>
   summarize(mean_sales = mean(Sales_Volume))
 
+#REVIEW: This obj name 'avgsales' is also used earlier for a slightly different one. 
+#To avoid confusion, using a more specific name 'avgsales_plot' would also be nice.
 avgsales |>
 ggplot(aes(Color,mean_sales)) +
 geom_col(aes(fill = Color))+
   facet_wrap(~Year)+
   coord_flip()+
   scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white"))
+
+#REVIEW: Adding interpretation would also make it easy to understand the graphs
+# From 2014 to 2024, Silver and black had the highest average sales volume, followed by blue. However, white had the lowest sales most of the years. This indicates consistant long-term consumer preference for certain car colors.
 ```
 
 ```{r}
@@ -120,12 +125,12 @@ geom_col(aes(fill = Color))+
 # filter(Year >= 2014, Year <= 2024)
 
 # summarize avg price and avg sales per year per fuel type
-
+#Review: added .groups = drop
 bmw_price_sales_summary <- bmw_sales_decade %>%
 group_by(Year, Fuel_Type) %>%
 summarize(
 avg_price = mean(Price_USD, na.rm = TRUE),
-avg_sales = mean(Sales_Volume, na.rm = TRUE)
+avg_sales = mean(Sales_Volume, na.rm = TRUE), .groups = "drop"
 )
 
 # visualize relationship btw price and sales volume
