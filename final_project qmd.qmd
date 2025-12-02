@@ -62,7 +62,7 @@ bmw_sales_decade <- bmw_sales_decade |>
 # 1. Average Sales by Year and Color
 avgsales <- bmw_sales_decade |> 
   group_by(Year, Color) |>
-  summarize(mean_sales = mean(Sales_Volume), .groups = "drop")
+  summarize(mean_sales = mean(Sales_Volume), .groups = "drop") # Good use of .groups here and throughout to prevent future confusion down the line any time you use avgsales. I always forget this!
 
 # 2. Summary Table (Long)
 summary_table <- avgsales |>
@@ -73,7 +73,7 @@ summary_table
 # 3. Formatted Table
 kable(
   summary_table,
-  col.names = c("Year", "Color", "Mean Sales Volume"),
+  col.names = c("Year", "Color", "Mean Sales Volume"), 
   caption = "Average BMW Sales by Color and Year"
 )
 
@@ -107,9 +107,9 @@ avgsales<- salescoloryear |>
 avgsales |>
 ggplot(aes(Color,mean_sales)) +
 geom_col(aes(fill = Color))+
-  facet_wrap(~Year)+
+  facet_wrap(~Year)+ # Separating out by year makes sense, though I personally wonder if there might be a way to have it on one larger graph with the x-axis as year, the y-axis as frequency, and each item contained within a group of vertical columns? Could be something to consider as right now, this feels very busy. It may also help to amend the labels so that we get a sense of the frequency of average sales.
   coord_flip()+
-  scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white"))
+  scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white")) # This is clever! Coordinating the car color to the scale. Love it.
 ```
 
 ```{r}
@@ -118,6 +118,8 @@ geom_col(aes(fill = Color))+
 # bmw_price_sales <- bmw_sales %>%
 # select(Year, Price_USD, Sales_Volume, Fuel_Type) %>%
 # filter(Year >= 2014, Year <= 2024)
+
+# Is the above section commented out because it was only done for a quick check? I don't see bmw_price_sales as a dataset anywhere else in the code; is this section still needed?
 
 # summarize avg price and avg sales per year per fuel type
 
@@ -130,16 +132,17 @@ avg_sales = mean(Sales_Volume, na.rm = TRUE)
 
 # visualize relationship btw price and sales volume
 
-ggplot(bmw_price_sales_summary, aes(x = avg_price, y = avg_sales, color = Fuel_Type)) +
+ggplot(bmw_price_sales_summary, aes(x = avg_price, y = avg_sales)) + # Removed color = Fuel_Type as part of later-described test.
 geom_line(linewidth = 1) +
 geom_point(size = 2) +
+  facet_wrap(~ Fuel_Type) # Added facet_wrap to test difference in visualization.
 labs(
 title = "Relationship Between BMW Price and Sales Volume (2014–2024)",
 x = "Average Price",
 y = "Average Sales Volume",
 color = "Fuel Type"
 ) +
-theme_minimal()
+theme_minimal() # To me, this graph feels a bit chaotic. It tells me what it's meaning to tell me, but the overlapping in the lines sometimes makes it hard to follow. This could be an opportunity to try a facet_wrap() by fuel type. I amended the code above to sample it; it's not as colorful, but that can be fixed. I think this helps to cut down on the busy feeling of the original. Just a thought!
 
 
 ```
