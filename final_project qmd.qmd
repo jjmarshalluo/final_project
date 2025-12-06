@@ -109,7 +109,8 @@ ggplot(aes(Color,mean_sales)) +
 geom_col(aes(fill = Color))+
   facet_wrap(~Year)+
   coord_flip()+
-  scale_fill_manual(values = c("black", "blue", "grey", "red", "yellow", "white"))
+  guides(fill="none")+
+  scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
 ```
 
 ```{r}
