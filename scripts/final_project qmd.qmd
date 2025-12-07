@@ -40,18 +40,28 @@ bmw_sales_decade <- bmw_sales %>%
 
 # Abstract
 
+Emily
+
 # Introduction
 
-interested in top 3 bestselling models
+Jessica
 
 ## Research Questions
+
+What were the top three bestselling BMW models between 2014 and 2024?
+
+Which BMW car colors were the most popular each year between 2014 and 2024?
+
+How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
+
+How has the price and number of sales changes from 2014 to 2024 for each fuel type?
 
 ```{r}
 # rank BMW models by sales volume to get top 3 popular models
 # will use object bmw)decade_top3 for inline text describing top 3
 bmw_decade_top3 <- bmw_sales_decade |> 
   group_by(Model) |> 
-  summarize(Model_Sales = sum(Sales_Volume)) |> 
+  summarize(Model_Sales = sum(Sales_Volume)) |>
   arrange(desc(Model_Sales))
 ```
 
@@ -63,16 +73,25 @@ bmw_sales_decade <- bmw_sales_decade |>
     Model == '3 Series' |
     Model == 'i8'
   ) |>
-  select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales_Volume)
+  mutate(Sales = Sales_Volume) |>
+  select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales)
 ```
 
 # Methods
 
-identify top 3 models, packages used, etc.
+Kat - identify top 3 models to filter, packages used, etc.
 
 # Results
 
-for each research question
+Dodji
+
+What were the top three bestselling BMW models between 2014 and 2024?
+
+Which BMW car colors were the most popular each year between 2014 and 2024?
+
+How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
+
+How has the price and number of sales changes from 2014 to 2024 for each fuel type?
 
 ## Table 1. Average BMW Sales by Color and Year
 
@@ -92,8 +111,6 @@ avgsales <- bmw_sales_decade |>
 # 2. Summary Table (Long)
 summary_table <- avgsales |>
   arrange(Year, Color)
-
-summary_table
 
 # 3. Formatted Table
 kable(
@@ -117,7 +134,6 @@ summary_stats <- avgsales |>
     .groups = "drop"
   )
 
-summary_stats
 
 # make data tidy again using pivot_longer
 summary_tidy <- summary_wide |>
@@ -149,6 +165,8 @@ geom_col(aes(fill = Color))+
   scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
 ```
 
+RQ
+
 ## Figure 2. \[title\]
 
 ```{r}
@@ -179,9 +197,9 @@ y = "Average Sales Volume",
 color = "Fuel Type"
 ) +
 theme_minimal()
-
-
 ```
+
+RQ
 
 ## Figure 3. Trends in BMW Model Price From 2014 to 2024 by Region
 
@@ -197,6 +215,10 @@ bmw_sales_decade |>
   ) +
   facet_wrap(~Region)
 ```
+
+# Discussion
+
+Jessica
 
 \newpage
 
