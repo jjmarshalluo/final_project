@@ -106,7 +106,7 @@ How has the price and number of sales changes from 2014 to 2024 for each fuel ty
 # 1. Average Sales by Year and Color
 avgsales <- bmw_sales_decade |> 
   group_by(Year, Color) |>
-  summarize(mean_sales = mean(Sales_Volume), .groups = "drop")
+  summarize(mean_sales = mean(Sales), .groups = "drop")
 
 # 2. Summary Table (Long)
 summary_table <- avgsales |>
@@ -144,17 +144,17 @@ summary_tidy <- summary_wide |>
   )
 ```
 
-## Figure 1. \[title\]
+## Figure 1. Popularity of Car Color by Year
 
 ```{r}
 # Figure
 # ADD LABELS AND CLEAN UP
 
 salescoloryear<- bmw_sales_decade |> 
-  select(Color, Year, Sales_Volume)
+  select(Color, Year, Sales)
 avgsales<- salescoloryear |> 
   group_by(Year, Color) |>
-  summarize(mean_sales = mean(Sales_Volume))
+  summarize(mean_sales = mean(Sales))
 
 avgsales |>
 ggplot(aes(Color,mean_sales)) +
@@ -162,12 +162,15 @@ geom_col(aes(fill = Color))+
   facet_wrap(~Year)+
   coord_flip()+
   guides(fill="none")+
+  labs(x="Car Color",
+  y="Average Sales",
+  title = "Popularity of Car Color by Year") +
   scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
 ```
 
 RQ
 
-## Figure 2. \[title\]
+## Figure 2. Relationship Between BMW Price and Sales Volume
 
 ```{r}
 # filter to 2014–2024, select needed variables
@@ -182,7 +185,7 @@ bmw_price_sales_summary <- bmw_sales_decade %>%
 group_by(Year, Fuel_Type) %>%
 summarize(
 avg_price = mean(Price_USD, na.rm = TRUE),
-avg_sales = mean(Sales_Volume, na.rm = TRUE)
+avg_sales = mean(Sales, na.rm = TRUE)
 )
 
 # visualize relationship btw price and sales volume
