@@ -1,12 +1,22 @@
 ---
 title: "final_project"
 author: "Dodjivi Amekoudji, Emily Lang, Jessica Marshall, Kat Vrotsos"
-format: html
+format: pdf
 editor: visual
+bibliography: final_project.bib
+csl: https://www.zotero.org/styles/apa
+execute: 
+  echo: false
+  eval: true
+  warning: false
+  message: false
 imbed_resources: true
 ---
 
 ```{r}
+#| label: load-packages
+#| echo: false 
+#| include: false
 # install.packages("here")
 # install.packages("tidyverse")
 library(here)
@@ -14,25 +24,30 @@ library(tidyverse)
 library(ggplot2)
 library(readr)
 library(knitr)
+library(tinytex)
 ```
 
-# Load the data
-
 ```{r}
-bmw_sales<- read_csv(here("data", "bmw_sales_data.csv"))
+#| label: load-data
+bmw_sales <- read_csv(here("data", "bmw_sales_data.csv"))
 ```
 
-# Filter the data
-
 ```{r}
+# filter data
 bmw_sales_decade <- bmw_sales %>% 
   filter(Year >= 2014)
 ```
 
-# Top 3 popular models
+# Abstract
+
+# Introduction
+
+interested in top 3 bestselling models
+
+## Research Questions
 
 ```{r}
-# rank BMW models by sales volume
+# rank BMW models by sales volume to get top 3 popular models
 # will use object bmw)decade_top3 for inline text describing top 3
 bmw_decade_top3 <- bmw_sales_decade |> 
   group_by(Model) |> 
@@ -40,10 +55,8 @@ bmw_decade_top3 <- bmw_sales_decade |>
   arrange(desc(Model_Sales))
 ```
 
-# Select relevant variables and filter data
-
 ```{r}
-# only include top 3 bestselling models and relevant variables in dataset
+# select/filter to only include top 3 bestselling models and relevant variables in dataset
 bmw_sales_decade <- bmw_sales_decade |>
   filter(
     Model == '7 Series' |
@@ -53,10 +66,22 @@ bmw_sales_decade <- bmw_sales_decade |>
   select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales_Volume)
 ```
 
-# Top colors by year
+# Methods
+
+identify top 3 models, packages used, etc.
+
+# Results
+
+for each research question
+
+## Table 1. Average BMW Sales by Color and Year
 
 ```{r}
 #| output: asis
+
+#NEED TO USE WIDER TABLE***
+
+# top colors by year
 # Table
 
 # 1. Average Sales by Year and Color
@@ -93,10 +118,21 @@ summary_stats <- avgsales |>
   )
 
 summary_stats
+
+# make data tidy again using pivot_longer
+summary_tidy <- summary_wide |>
+  pivot_longer(
+    cols = c(`2014`:`2024`),
+    names_to = 'Year',
+    values_to = 'mean_sales'
+  )
 ```
+
+## Figure 1. \[title\]
 
 ```{r}
 # Figure
+# ADD LABELS AND CLEAN UP
 
 salescoloryear<- bmw_sales_decade |> 
   select(Color, Year, Sales_Volume)
@@ -112,6 +148,8 @@ geom_col(aes(fill = Color))+
   guides(fill="none")+
   scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
 ```
+
+## Figure 2. \[title\]
 
 ```{r}
 # filter to 2014–2024, select needed variables
@@ -145,7 +183,7 @@ theme_minimal()
 
 ```
 
-# Visualization Trends in BMW Model Price From 2014 to 2024 by Region
+## Figure 3. Trends in BMW Model Price From 2014 to 2024 by Region
 
 ```{r}
 bmw_sales_decade |>
@@ -160,4 +198,6 @@ bmw_sales_decade |>
   facet_wrap(~Region)
 ```
 
-We will use pivot_longer() to change data back to tidy version
+\newpage
+
+# References
