@@ -83,17 +83,23 @@ Kat - identify top 3 models to filter, packages used, etc.
 
 # Results
 
-Dodji
+RQ1 :
 
-What were the top three bestselling BMW models between 2014 and 2024?
+Figure 2 shows that the BMW 3 Series had the highest sales and was the top-selling model during the decade. The BMW 7 Series also showed strong and consistent sales, followed by the BMW i8.
 
-Which BMW car colors were the most popular each year between 2014 and 2024?
+RQ2 :
 
-How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
+Across all years from 2014 to 2024, White, Silver, and Red were consistently the most popular BMW car colors, showing the highest average sales in nearly every year as shown in Figure 1. White remained the top-selling color throughout most of the decade, followed closely by Silver. Red also maintained strong sales and regularly appeared among the top three colors each year.
 
-How has the price and number of sales changes from 2014 to 2024 for each fuel type?
+RQ3:
 
-## Table 1. Average BMW Sales by Color and Year
+Figure 3 shows that from 2014 to 2024, the prices of the BMW 3 Series, 7 Series, and i8 increased in all six regions: Africa, Asia, Europe, the Middle East, North America, and South America. The 3 Series showed the most consistent growth, especially in Asia and North America. The 7 Series fluctuated but ended higher in every region, with more increases in Asia and North America. The i8 also rose in price, with important growth in Asia and North America and moderate growth elsewhere.
+
+RQ4:
+
+Figure 2 shows that BMW prices for all fuel types: Diesel, Petrol, Hybrid, and Electric, increased between 2014 and 2024. Despite these price increases, Electric and Hybrid vehicles maintained relatively stable sales, indicating consistent demand. Petrol vehicles displayed moderate changes in sales, whereas Diesel vehicles showed the largest fluctuations, with frequent declines in sales when prices rose. Overall, Electric and Hybrid models demonstrated steady demand, while Diesel and Petrol models were more sensitive to price changes.
+
+# Table 1. Average BMW Sales by Color and Year
 
 ```{r}
 #| output: asis
