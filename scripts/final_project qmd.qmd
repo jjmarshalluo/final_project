@@ -44,7 +44,9 @@ Emily
 
 # Introduction
 
-Cars are an important part of how people get around. In the United States alone, there are 287,096,500 registered automobiles as of 2023 [@alternat]. Consumer car buying habits can vary by a variety of factors, including, but not limited to, color [@generator2023], model [@findyou], price [@generator2023a], region [@whyare2017], and fuel type [@generator2023b]. In addition, car buying habits have been heavily affected by events in the last 10 years, including the global pandemic and resulting challenges in supply chain management. In order to better understand the needs and desires of the modern consumer, it is vital that car manufacturers, like BMW, understand current data about car sales.Research Questions
+Cars are an important part of how people get around. In the United States alone, there are 287,096,500 registered automobiles as of 2023 [@alternat]. Consumer car buying habits can vary by a variety of factors, including, but not limited to, color[@batra2015] , model [@findyou], price [@nerurkar2023], region [@igunza2017], and fuel type [@nerurkar2023a]. In addition, car buying habits have been heavily affected by events in the last 10 years, including the global pandemic and resulting challenges in supply chain management[@jansen2024]. In order to better understand the needs and desires of the modern consumer, it is vital that car manufacturers, like BMW, understand current data about car sales.
+
+Research Questions
 
 RQ1: What were the top three bestselling BMW models between 2014 and 2024?
 
@@ -208,7 +210,11 @@ bmw_sales_decade |>
 
 # Discussion
 
-Jessica
+For research question 1, the  3 series, 7 series, and i8 were found to be the best selling throughout the decade. This is unsurprising, as all three o[@bagwell-gray2020]f these cars are smaller vehicles that could be described as sedans. Sedans are thought to be popular for 6 primary reasons: “fuel economy, overall crash test rating, costs, features, performance, and dependability”[@saatchi]. Their enduring popularity is evidenced by the overall popularity of these three models. This also explains the results of research question 3, as consistent demand has led to a steady increase in price, particularly as car prices increased overall [@jansen2024]. 
+
+Next, addressing research question 2, the data showed that Silver, Grey, and Black were the most consistently popular colors, with Blue and Red also being most popular some years. This is inconsistent with the research about car color popularity, which concludes that the color white is by far the most popular paint color[@axaltacoatingsystemsgermanygmbhco.kg2022].
+
+Finally, with regard to research question 4, changes in car sales varied widely. Demand for hybrid and electric cars stayed mostly consistent and demand for petrol and diesel cars varied more widely. This is unexpected, as previous research has shown that prices of gas and diesel cars are less elastic than the price for hybrid and fully electric cars[@fridstrøm2021].
 
 \newpage
 
