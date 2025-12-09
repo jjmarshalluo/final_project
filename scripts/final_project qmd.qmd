@@ -44,9 +44,7 @@ Emily
 
 # Introduction
 
-Jessica
-
-## Research Questions
+Cars are an important part of how people get around. In the United States alone, there are 287,096,500 registered automobiles as of 2023 [@alternat]. Consumer car buying habits can vary by a variety of factors, including, but not limited to, color [@generator2023], model [@findyou], price [@generator2023a], region [@whyare2017], and fuel type [@generator2023b]. In addition, car buying habits have been heavily affected by events in the last 10 years, including the global pandemic and resulting challenges in supply chain management. In order to better understand the needs and desires of the modern consumer, it is vital that car manufacturers, like BMW, understand current data about car sales.Research Questions
 
 RQ1: What were the top three bestselling BMW models between 2014 and 2024?
 
@@ -79,13 +77,13 @@ bmw_sales_decade <- bmw_sales_decade |>
 
 # Methods
 
-The BMW Worldwide Sales Records 2010 to 2024 data set was accessed and downloaded from Kaggle [@data]. Relevant variables included BMW model, sales year, region (Africa, Asia, Europe, Middle East, North America, or South America), car color, fuel type (diesel, electric, hybird, or petrol), price, and the number of sales. R was used to examine the data [@R]. R packages including tidyverse, ggplot2, readr, knitr, tinytex, and here were used to assess and present the data in a table and three visualizations [@tidyverse; @ggplot2; @knitr; @readr; @tinytex; @here]. 
+The BMW Worldwide Sales Records 2010 to 2024 data set was accessed and downloaded from Kaggle [@data]. Relevant variables included BMW model, sales year, region (Africa, Asia, Europe, Middle East, North America, or South America), car color, fuel type (diesel, electric, hybird, or petrol), price, and the number of sales. R was used to examine the data [@R]. R packages including tidyverse, ggplot2, readr, knitr, tinytex, and here were used to assess and present the data in a table and three visualizations [@tidyverse; @ggplot2; @knitr; @readr; @tinytex; @here].
 
-First, the data set was filtered to the past decade between 2014 and 2024. The top three bestselling BMW models were identified by calculating the sum of the number of sales for each model across the past decade. All subsequent analyses and visualizations were for the top three models from 2014 to 2024. 
+First, the data set was filtered to the past decade between 2014 and 2024. The top three bestselling BMW models were identified by calculating the sum of the number of sales for each model across the past decade. All subsequent analyses and visualizations were for the top three models from 2014 to 2024.
 
-Popularity of BMW car color by year was assessed by grouping the data by year and color, then computing the average sales volume. Detailed information was outlined in a table, and presented in bar charts for each year. 
+Popularity of BMW car color by year was assessed by grouping the data by year and color, then computing the average sales volume. Detailed information was outlined in a table, and presented in bar charts for each year.
 
-In order to visualize the relationship between price and sales each year by fuel type, the data was grouped by year and fuel type, then the average price and sales volume were calculated. Trends were shown visually with a connected scatterplot. 
+In order to visualize the relationship between price and sales each year by fuel type, the data was grouped by year and fuel type, then the average price and sales volume were calculated. Trends were shown visually with a connected scatterplot.
 
 Trends in top three bestselling BMW model price by region from 2014 to 2024 were visualized using separate line graphs showing the relationship between model price by year for each region, with each model represented in a different color.
 
