@@ -1,5 +1,5 @@
 ---
-title: "final_project"
+title: "Worldwide Sales Records for the Top Three Bestselling BMW Models from 2014 to 2024"
 author: "Dodjivi Amekoudji, Emily Lang, Jessica Marshall, Kat Vrotsos"
 format: pdf
 editor: visual
@@ -48,13 +48,13 @@ Jessica
 
 ## Research Questions
 
-What were the top three bestselling BMW models between 2014 and 2024?
+RQ1: What were the top three bestselling BMW models between 2014 and 2024?
 
-Which BMW car colors were the most popular each year between 2014 and 2024?
+RQ2: Which BMW car colors were the most popular each year between 2014 and 2024?
 
-How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
+RQ3: How has the price and number of sales for the top three bestselling BMW models changed from 2014 to 2024 for each fuel type?
 
-How has the price and number of sales changes from 2014 to 2024 for each fuel type?
+RQ4: How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
 
 ```{r}
 # rank BMW models by sales volume to get top 3 popular models
@@ -79,27 +79,23 @@ bmw_sales_decade <- bmw_sales_decade |>
 
 # Methods
 
-Kat - identify top 3 models to filter, packages used, etc.
+The BMW Worldwide Sales Records 2010 to 2024 data set was accessed and downloaded from Kaggle [@data]. Relevant variables included BMW model, sales year, region (Africa, Asia, Europe, Middle East, North America, or South America), car color, fuel type (diesel, electric, hybird, or petrol), price, and the number of sales. R was used to examine the data [@R]. R packages including tidyverse, ggplot2, readr, knitr, tinytex, and here were used to assess and present the data in a table and three visualizations [@tidyverse; @ggplot2; @knitr; @readr; @tinytex; @here]. 
+
+First, the data set was filtered to the past decade between 2014 and 2024. The top three bestselling BMW models were identified by calculating the sum of the number of sales for each model across the past decade. All subsequent analyses and visualizations were for the top three models from 2014 to 2024. 
+
+Popularity of BMW car color by year was assessed by grouping the data by year and color, then computing the average sales volume. Detailed information was outlined in a table, and presented in bar charts for each year. 
+
+In order to visualize the relationship between price and sales each year by fuel type, the data was grouped by year and fuel type, then the average price and sales volume were calculated. Trends were shown visually with a connected scatterplot. 
+
+Trends in top three bestselling BMW model price by region from 2014 to 2024 were visualized using separate line graphs showing the relationship between model price by year for each region, with each model represented in a different color.
 
 # Results
 
-RQ1 :
+The average number of sales from 2014 to 2024 by BMW model revealed that the `r bmw_decade_top3$Model[1]` was best-selling BMW model during this decade, folllowed by the `r bmw_decade_top3$Model[2]` and `r bmw_decade_top3$Model[3]`. Subsequent results are reported among the `r bmw_decade_top3$Model[1]`, `r bmw_decade_top3$Model[2]`, and `r bmw_decade_top3$Model[3]` models (RQ1).
 
-Figure 2 shows that the BMW 3 Series had the highest sales and was the top-selling model during the decade. The BMW 7 Series also showed strong and consistent sales, followed by the BMW i8.
+Across all years from 2014 to 2024, White, Silver, and Red were consistently the most popular BMW car colors, showing the highest average sales in nearly every year as shown in Figure 1 and detailed in Table 1 (RQ2). White remained the top-selling color throughout most of the decade, followed closely by Silver. Red also maintained strong sales and regularly appeared among the top three colors each year.
 
-RQ2 :
-
-Across all years from 2014 to 2024, White, Silver, and Red were consistently the most popular BMW car colors, showing the highest average sales in nearly every year as shown in Figure 1. White remained the top-selling color throughout most of the decade, followed closely by Silver. Red also maintained strong sales and regularly appeared among the top three colors each year.
-
-RQ3:
-
-Figure 3 shows that from 2014 to 2024, the prices of the BMW 3 Series, 7 Series, and i8 increased in all six regions: Africa, Asia, Europe, the Middle East, North America, and South America. The 3 Series showed the most consistent growth, especially in Asia and North America. The 7 Series fluctuated but ended higher in every region, with more increases in Asia and North America. The i8 also rose in price, with important growth in Asia and North America and moderate growth elsewhere.
-
-RQ4:
-
-Figure 2 shows that BMW prices for all fuel types: Diesel, Petrol, Hybrid, and Electric, increased between 2014 and 2024. Despite these price increases, Electric and Hybrid vehicles maintained relatively stable sales, indicating consistent demand. Petrol vehicles displayed moderate changes in sales, whereas Diesel vehicles showed the largest fluctuations, with frequent declines in sales when prices rose. Overall, Electric and Hybrid models demonstrated steady demand, while Diesel and Petrol models were more sensitive to price changes.
-
-# Table 1. Average BMW Sales by Color and Year
+# Table 1.
 
 ```{r}
 #| output: asis
@@ -109,48 +105,35 @@ Figure 2 shows that BMW prices for all fuel types: Diesel, Petrol, Hybrid, and E
 # top colors by year
 # Table
 
-# 1. Average Sales by Year and Color
+# Average Sales by Year and Color (long)
 avgsales <- bmw_sales_decade |> 
   group_by(Year, Color) |>
   summarize(mean_sales = mean(Sales), .groups = "drop")
 
-# 2. Summary Table (Long)
-summary_table <- avgsales |>
-  arrange(Year, Color)
 
-# 3. Formatted Table
-kable(
-  summary_table,
-  col.names = c("Year", "Color", "Mean Sales Volume"),
-  caption = "Average BMW Sales by Color and Year"
-)
-
-# 4. Wide Table
+# Wide Table
 summary_wide <- avgsales |>
   pivot_wider(
-    names_from = Year,
+    names_from = Color,
     values_from = mean_sales
-  )
+  ) 
 
-summary_stats <- avgsales |>
-  group_by(Color) |>
-  summarize(
-    avg_sales = mean(mean_sales),
-    total_sales = sum(mean_sales),
-    .groups = "drop"
+summary_wide |>
+  kable(
+    col.names = c('Year', 'Black', 'Blue', 'Grey', 'Red', 'Silver', 'White'),
+    caption = 'Average BMW Sales by Color and Year'
   )
-
 
 # make data tidy again using pivot_longer
 summary_tidy <- summary_wide |>
   pivot_longer(
-    cols = c(`2014`:`2024`),
-    names_to = 'Year',
+    cols = c(`Black`:`White`),
+    names_to = 'Color',
     values_to = 'mean_sales'
   )
 ```
 
-## Figure 1. Popularity of Car Color by Year
+## Figure 1.
 
 ```{r}
 # Figure
@@ -174,9 +157,9 @@ geom_col(aes(fill = Color))+
   scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
 ```
 
-RQ
+Figure 2 shows that BMW prices for all fuel types: Diesel, Petrol, Hybrid, and Electric, increased between 2014 and 2024 (RQ3). Despite these price increases, Electric and Hybrid vehicles maintained relatively stable sales, indicating consistent demand. Petrol vehicles displayed moderate changes in sales, whereas Diesel vehicles showed the largest fluctuations, with frequent declines in sales when prices rose. Overall, Electric and Hybrid models demonstrated steady demand, while Diesel and Petrol models were more sensitive to price changes.
 
-## Figure 2. Relationship Between BMW Price and Sales Volume
+## Figure 2.
 
 ```{r}
 # filter to 2014–2024, select needed variables
@@ -194,13 +177,13 @@ avg_price = mean(Price_USD, na.rm = TRUE),
 avg_sales = mean(Sales, na.rm = TRUE)
 )
 
-# visualize relationship btw price and sales volume
+# visualize relationship bmw price and sales volume
 
 ggplot(bmw_price_sales_summary, aes(x = avg_price, y = avg_sales, color = Fuel_Type)) +
 geom_line(linewidth = 1) +
 geom_point(size = 2) +
 labs(
-title = "Relationship Between BMW Price and Sales Volume (2014–2024)",
+title = "Relationship Between BMW Price and Sales 2014 to 2024",
 x = "Average Price",
 y = "Average Sales Volume",
 color = "Fuel Type"
@@ -208,9 +191,9 @@ color = "Fuel Type"
 theme_minimal()
 ```
 
-RQ
+Figure 3 shows that from 2014 to 2024, the prices of the BMW 3 Series, 7 Series, and i8 increased in all six regions: Africa, Asia, Europe, the Middle East, North America, and South America (RQ4). The 3 Series showed the most consistent growth, especially in Asia and North America. The 7 Series fluctuated but ended higher in every region, with more increases in Asia and North America. The i8 also rose in price, with important growth in Asia and North America and moderate growth elsewhere.
 
-## Figure 3. Trends in BMW Model Price From 2014 to 2024 by Region
+## Figure 3.
 
 ```{r}
 bmw_sales_decade |>
