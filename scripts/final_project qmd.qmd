@@ -131,6 +131,8 @@ summary_wide <- avgsales |>
     names_from = Year,
     values_from = mean_sales
   )
+kable(summary_wide,
+      caption= "Average BMW Sales by Color and Year")
 
 summary_stats <- avgsales |>
   group_by(Color) |>
