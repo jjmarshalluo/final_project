@@ -1,0 +1,221 @@
+---
+title: "Worldwide Sales Records for the Top Three Bestselling BMW Models from 2014 to 2024"
+author: "Dodjivi Amekoudji, Emily Lang, Jessica Marshall, Kat Vrotsos"
+format: pdf
+editor: visual
+bibliography: final_project.bib
+csl: https://www.zotero.org/styles/apa
+execute: 
+  echo: false
+  eval: true
+  warning: false
+  message: false
+imbed_resources: true
+---
+
+```{r}
+#| label: load-packages
+#| echo: false 
+#| include: false
+# install.packages("here")
+# install.packages("tidyverse")
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(knitr)
+library(tinytex)
+```
+
+```{r}
+#| label: load-data
+bmw_sales <- read_csv(here("data", "bmw_sales_data.csv"))
+```
+
+```{r}
+# filter data
+bmw_sales_decade <- bmw_sales %>% 
+  filter(Year >= 2014)
+```
+
+# Abstract
+
+Emily
+
+# Introduction
+
+Cars are an important part of how people get around. In the United States alone, there are 287,096,500 registered automobiles as of 2023 [@alternat]. Consumer car buying habits can vary by a variety of factors, including, but not limited to, color[@batra2015] , model [@findyou], price [@nerurkar2023], region [@igunza2017], and fuel type [@nerurkar2023a]. In addition, car buying habits have been heavily affected by events in the last 10 years, including the global pandemic and resulting challenges in supply chain management[@jansen2024]. In order to better understand the needs and desires of the modern consumer, it is vital that car manufacturers, like BMW, understand current data about car sales.
+
+Research Questions
+
+RQ1: What were the top three bestselling BMW models between 2014 and 2024?
+
+RQ2: Which BMW car colors were the most popular each year between 2014 and 2024?
+
+RQ3: How has the price and number of sales for the top three bestselling BMW models changed from 2014 to 2024 for each fuel type?
+
+RQ4: How has the price of each of the top three bestselling BMW models changed between 2014 and 2024 by region?
+
+```{r}
+# rank BMW models by sales volume to get top 3 popular models
+# will use object bmw)decade_top3 for inline text describing top 3
+bmw_decade_top3 <- bmw_sales_decade |> 
+  group_by(Model) |> 
+  summarize(Model_Sales = sum(Sales_Volume)) |>
+  arrange(desc(Model_Sales))
+```
+
+```{r}
+# select/filter to only include top 3 bestselling models and relevant variables in dataset
+bmw_sales_decade <- bmw_sales_decade |>
+  filter(
+    Model == '7 Series' |
+    Model == '3 Series' |
+    Model == 'i8'
+  ) |>
+  mutate(Sales = Sales_Volume) |>
+  select(Model, Year, Region, Color, Fuel_Type, Price_USD, Sales)
+```
+
+# Methods
+
+The BMW Worldwide Sales Records 2010 to 2024 data set was accessed and downloaded from Kaggle [@data]. Relevant variables included BMW model, sales year, region (Africa, Asia, Europe, Middle East, North America, or South America), car color, fuel type (diesel, electric, hybird, or petrol), price, and the number of sales. R was used to examine the data [@R]. R packages including tidyverse, ggplot2, readr, knitr, tinytex, and here were used to assess and present the data in a table and three visualizations [@tidyverse; @ggplot2; @knitr; @readr; @tinytex; @here].
+
+First, the data set was filtered to the past decade between 2014 and 2024. The top three bestselling BMW models were identified by calculating the sum of the number of sales for each model across the past decade. All subsequent analyses and visualizations were for the top three models from 2014 to 2024.
+
+Popularity of BMW car color by year was assessed by grouping the data by year and color, then computing the average sales volume. Detailed information was outlined in a table, and presented in bar charts for each year.
+
+In order to visualize the relationship between price and sales each year by fuel type, the data was grouped by year and fuel type, then the average price and sales volume were calculated. Trends were shown visually with a connected scatterplot.
+
+Trends in top three bestselling BMW model price by region from 2014 to 2024 were visualized using separate line graphs showing the relationship between model price by year for each region, with each model represented in a different color.
+
+# Results
+
+The average number of sales from 2014 to 2024 by BMW model revealed that the `r bmw_decade_top3$Model[1]` was best-selling BMW model during this decade, folllowed by the `r bmw_decade_top3$Model[2]` and `r bmw_decade_top3$Model[3]`. Subsequent results are reported among the `r bmw_decade_top3$Model[1]`, `r bmw_decade_top3$Model[2]`, and `r bmw_decade_top3$Model[3]` models (RQ1).
+
+Across all years from 2014 to 2024, White, Silver, and Red were consistently the most popular BMW car colors, showing the highest average sales in nearly every year as shown in Figure 1 and detailed in Table 1 (RQ2). White remained the top-selling color throughout most of the decade, followed closely by Silver. Red also maintained strong sales and regularly appeared among the top three colors each year.
+
+# Table 1.
+
+```{r}
+#| output: asis
+
+#NEED TO USE WIDER TABLE***
+
+# top colors by year
+# Table
+
+# Average Sales by Year and Color (long)
+avgsales <- bmw_sales_decade |> 
+  group_by(Year, Color) |>
+  summarize(mean_sales = mean(Sales), .groups = "drop")
+
+
+# Wide Table
+summary_wide <- avgsales |>
+  pivot_wider(
+    names_from = Color,
+    values_from = mean_sales
+  ) 
+
+summary_wide |>
+  kable(
+    col.names = c('Year', 'Black', 'Blue', 'Grey', 'Red', 'Silver', 'White'),
+    caption = 'Average BMW Sales by Color and Year'
+  )
+
+# make data tidy again using pivot_longer
+summary_tidy <- summary_wide |>
+  pivot_longer(
+    cols = c(`Black`:`White`),
+    names_to = 'Color',
+    values_to = 'mean_sales'
+  )
+```
+
+## Figure 1.
+
+```{r}
+# Figure
+# ADD LABELS AND CLEAN UP
+
+salescoloryear<- bmw_sales_decade |> 
+  select(Color, Year, Sales)
+avgsales<- salescoloryear |> 
+  group_by(Year, Color) |>
+  summarize(mean_sales = mean(Sales))
+
+avgsales |>
+ggplot(aes(Color,mean_sales)) +
+geom_col(aes(fill = Color))+
+  facet_wrap(~Year)+
+  coord_flip()+
+  guides(fill="none")+
+  labs(x="Car Color",
+  y="Average Sales",
+  title = "Popularity of Car Color by Year") +
+  scale_fill_manual(values = c("black", "blue", "gray60", "red", "slategray", "white"))
+```
+
+Figure 2 shows that BMW prices for all fuel types: Diesel, Petrol, Hybrid, and Electric, increased between 2014 and 2024 (RQ3). Despite these price increases, Electric and Hybrid vehicles maintained relatively stable sales, indicating consistent demand. Petrol vehicles displayed moderate changes in sales, whereas Diesel vehicles showed the largest fluctuations, with frequent declines in sales when prices rose. Overall, Electric and Hybrid models demonstrated steady demand, while Diesel and Petrol models were more sensitive to price changes.
+
+## Figure 2.
+
+```{r}
+# filter to 2014–2024, select needed variables
+
+# bmw_price_sales <- bmw_sales %>%
+# select(Year, Price_USD, Sales_Volume, Fuel_Type) %>%
+# filter(Year >= 2014, Year <= 2024)
+
+# summarize avg price and avg sales per year per fuel type
+
+bmw_price_sales_summary <- bmw_sales_decade %>%
+group_by(Year, Fuel_Type) %>%
+summarize(
+avg_price = mean(Price_USD, na.rm = TRUE),
+avg_sales = mean(Sales, na.rm = TRUE)
+)
+
+# visualize relationship bmw price and sales volume
+
+ggplot(bmw_price_sales_summary, aes(x = avg_price, y = avg_sales, color = Fuel_Type)) +
+geom_line(linewidth = 1) +
+geom_point(size = 2) +
+labs(
+title = "Relationship Between BMW Price and Sales 2014 to 2024",
+x = "Average Price",
+y = "Average Sales Volume",
+color = "Fuel Type"
+) +
+theme_minimal()
+```
+
+Figure 3 shows that from 2014 to 2024, the prices of the BMW 3 Series, 7 Series, and i8 increased in all six regions: Africa, Asia, Europe, the Middle East, North America, and South America (RQ4). The 3 Series showed the most consistent growth, especially in Asia and North America. The 7 Series fluctuated but ended higher in every region, with more increases in Asia and North America. The i8 also rose in price, with important growth in Asia and North America and moderate growth elsewhere.
+
+## Figure 3.
+
+```{r}
+bmw_sales_decade |>
+  ggplot(aes(Year, Price_USD, color = Model)) +
+  geom_smooth(se = FALSE) +
+  labs(
+    x = 'Year',
+    y = 'Price (USD)',
+    title = 'Trends in BMW Model Price From 2014 to 2024 by Region',
+    subtitle = 'Top 3 Bestselling BMW Models'
+  ) +
+  facet_wrap(~Region)
+```
+
+# Discussion
+
+For research question 1, the  3 series, 7 series, and i8 were found to be the best selling throughout the decade. This is unsurprising, as all three o[@bagwell-gray2020]f these cars are smaller vehicles that could be described as sedans. Sedans are thought to be popular for 6 primary reasons: “fuel economy, overall crash test rating, costs, features, performance, and dependability”[@saatchi]. Their enduring popularity is evidenced by the overall popularity of these three models. This also explains the results of research question 3, as consistent demand has led to a steady increase in price, particularly as car prices increased overall [@jansen2024]. 
+
+Next, addressing research question 2, the data showed that Silver, Grey, and Black were the most consistently popular colors, with Blue and Red also being most popular some years. This is inconsistent with the research about car color popularity, which concludes that the color white is by far the most popular paint color[@axaltacoatingsystemsgermanygmbhco.kg2022].
+
+Finally, with regard to research question 4, changes in car sales varied widely. Demand for hybrid and electric cars stayed mostly consistent and demand for petrol and diesel cars varied more widely. This is unexpected, as previous research has shown that prices of gas and diesel cars are less elastic than the price for hybrid and fully electric cars[@fridstrøm2021].
+
+\newpage
+
+# References
